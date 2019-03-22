@@ -19,6 +19,9 @@ const (
 )
 
 func main() {
+	// rudimentally keep count of connections
+	var connectedClients int
+
 	// listen for incoming connections
 	l, err := net.Listen(CONN_TYPE, CONN_HOST+":"+CONN_PORT)
 	if err != nil {
@@ -32,21 +35,23 @@ func main() {
 	// wait indefinitely listeninig for incoming connections
 	for {
 		conn, err := l.Accept()
+		connectedClients++
 		if err != nil {
 			fmt.Println("Error executing l.Accept(): ", err.Error())
 			os.Exit(1)
 		}
 
 		conn.Write([]byte(string("Welcome to benny's echo service\nWe echo!\n")))
+		conn.Write([]byte(string(fmt.Sprintf("There %d connected clients\n", connectedClients))))
 		conn.Write([]byte(string("Enter your string!\n")))
 		conn.Write([]byte(string("Enter STOP to end the session\n")))
 		conn.Write([]byte(string("Enter PANIC to end the program in panic\n")))
 		// handle the request received in a goroutine
-		go handleRequest(conn)
+		go handleRequest(conn, &connectedClients)
 	}
 }
 
-func handleRequest(conn net.Conn) {
+func handleRequest(conn net.Conn, counter *int) {
 	fmt.Println(conn.RemoteAddr().String())
 	for {
 		netData, err := bufio.NewReader(conn).ReadString('\n')
@@ -67,5 +72,6 @@ func handleRequest(conn net.Conn) {
 
 		conn.Write([]byte(string("benny says: " + temp+"\n")))
 	}
+	*counter--
 	conn.Close()
 }
