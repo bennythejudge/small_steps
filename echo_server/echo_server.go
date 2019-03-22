@@ -2,7 +2,7 @@
 write an echo TCP server
 */
 
-package main
+package echo_server
 
 import (
 	"bufio"
