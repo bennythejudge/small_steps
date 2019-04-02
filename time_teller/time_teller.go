@@ -1,5 +1,9 @@
 /*
 A service that tells time
+
+Remember to test using
+
+nc localhost 3333 (don't use curl)
  */
 package main
 

@@ -7,7 +7,8 @@
 
 - A service that tells time
 
-A service that makes a Google search and returns title of top 5
+- A service that makes a Google search and returns title of top 5
+
 A service that returns API results from a third party service, for example searching books on Google Books or products on Amazon.
 After building these to return plain text on raw sockets or maybe JSON on http, then try to make them fault-tolerant, for example disconnect the machine from the internet and make your service handle that situation of not reaching Amazon API.
 
